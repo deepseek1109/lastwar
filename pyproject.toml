@@ -1,0 +1,14 @@
+[project]
+name = "player-recruiter"
+version = "0.1.0"
+description = "ML model to predict best players to recruit"
+requires-python = ">=3.9" # Scikit-learn requires Python >=3.9
+dependencies = [
+    "pandas",
+    "scikit-learn",
+    "matplotlib",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
