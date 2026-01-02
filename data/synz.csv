@@ -1,127 +1,198 @@
-Power,Kills,Level,Member
-291,0.66,32,Ronin455
-280,13.10,34,Vyper
-231,1.10,31,Shartbird
-204,0.12,30,Yo Mangos
-202,1.80,30,Delarosta
-200,0.20,31,eddy1587
-199,4.40,32,learn2swim
-195,1.60,31,uBaTcHu
-192.3,3.90,32,StarButterfly1
-191,0.19,30,AmericanLimited
-191,1.00,33,Kara 74
-189,3.6,33,Flint20aa
-189,1.50,32,OldSnakE1982
-189,7.30,33,JadeFizzy
-188,6.00,32,Cause im not Vegeta
-187,0.24,31,Kelly Hunter
-183,0.50,30,JonJedi
-180,4.00,32,DIREEK
-179,1.20,32,Lyla marie
-179,0.68,32,Comeaux7
-179,3.10,31,Bboer128204
-176,11.40,32,Ahmed Hamza123
-175,0.95,31,not urs
-173,0.37,31,JB On A Journey
-172,0.49,30,apple
-172,0.42,31,NGotcha
-171,1.30,32,Stu Stew
-171,0.50,30,Higgins Az
-170,0.87,32,Kwamesew
-169,1.70,33,stonecoldd
-168,7.10,33,cutesnugglybear
-167,3.50,33,Nari
-166,2.10,31,Bishop
-165,1.40,32,I van
-163,2.20,32,msergio1989
-158,4.50,32,Samyslims
-,1.70,31,nikopm
-156,3.00,31,Matth
-155,0.83,31,Unifox0202
-153,0.25,30,DOCTA
-153,5.00,33,UNSTBL CASIO
-152,0.17,30,Stealth Shadow
-152,0.91,30,Blim Attack
-152,3.00,30,Que
-151,3.40,32,Bellion Lusk
-,0.53,31,Toxic
-151,0.11,31,Buddy1976
-150,1.80,33,snoopy1004
-150,0.27,31,Slugzilla65
-149,0.47,31,OOOOOF
-147,0.08,30,Irfizzy
-145,4.40,31,Go
-142,0.97,30,SSFHT
-,0.32,34,Hobe King
-140,0.60,30,King of the Koopas
-139,0.26,30,e1Feo
-139,0.37,33,vetman81
-138,1.50,32,WhiskeyontheRocks
-138,0.72,30,CGeldart
-137,2.60,33,Butcher Br
-136,0.40,32,COMPLEXO SINFOROSO
-135,0.36,31,Playverb miguel
-132,0.15,30,Mutant Army
-131,0.26,30,Taz1979
-131,0.12,30,2SWEET
-130,2.90,31,Caldo 7
-127,1.90,32,MsevenM7
-124,0.25,30,ChampionK
-,0.15,30,Fort Leal
-123,0.44,30,Dutch
-118,0.03,30,Storm0Shadow
-118,0.13,31,F A H Q
-112,0.11,30,Major PDR
-111,0.51,30,abiomon
-106,0.13,30,TimeWaster80
-104,0.10,30,xXKONGXx
-103,0.11,30,Underb00b
-98,0.19,30,Qossay0021
-91,0.16,30,Sainted7
-85,0.01,30,WTHELLYONTE
-67,0.21,31,Teddyyh
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-,,,
-199,15.16,31,SAMHAIN13
-192,3.12,30,Monztrous
-188,4.04,33,Pewpewpewwwwwww
-181,0.75,32,Tony595595
-180,0.15,31,Gaily Waily
-177,0.75,31,Spork
-173,0.19,30,Thomster
-164,0.64,30,Fort Graves
-161,1.15,31,unknown tree
-154,1.61,30,Johns Deere
-153,1.56,31,Buff Master Griz
-151,0.26,30,Cbolicious
-150,1.43,30,The1whoknox
-149,1.53,32,Taiqi
-148,0.60,30,Troop Meek
-146,1.64,33,DeepseekR2
-144,0.57,30,Deepsea325
-143,1.34,31,FemShep
-143,0.64,30,DEWstruction
-142,0.14,30,Savagelina8228
-140,0.19,31,Qusqo
-139,0.36,28,Timbo8013
-138,0.85,30,Captain cold
-110,0.58,27,The 1 and Only Dude
-110,0.27,30,Geocrat
-108,0.24,27,Ct561
-108,0.37,29,Explosive78
+Alliance,Member,Level,Rank,Power,Kills,Prof Lvl,Gift Lvl
+SYNZ,Samyslims,32,R5,158,4.50,82,8
+SYNZ,,,,,,,
+SYNZ,cutesnugglybear,33,R4,168,7.10,100,7
+SYNZ,Bishop,31,R4,166,2.10,97,5
+SYNZ,Caldo 7,31,R4,130,2.90,91,5
+SYNZ,Vyper,34,R4,280,13.10,100,12
+SYNZ,OldSnakE1982,32,R4,189,1.50,93,6
+SYNZ,Flint20aa,33,R4,189,3.6,92,6
+SYNZ,JadeFizzy,33,R4,189,7.30,85,6
+SYNZ,Delarosta,30,R4,202,1.80,63,5
+SYNZ,Kelly Hunter,31,R4,187,0.24,76,5
+SYNZ,,,,,,,
+SYNZ,Cause im not Vegeta,32,R3,188,6.00,95,8
+SYNZ,Ronin455,32,R3,291,0.66,100,5
+SYNZ,JB On A Journey,31,R3,173,0.37,86,6
+SYNZ,Blim Attack,30,R3,152,0.91,77,6
+SYNZ,UNSTBL CASIO,33,R3,153,5.00,94,6
+SYNZ,Kwamesew,32,R3,170,0.87,87,6
+SYNZ,Dutch,30,R3,123,0.44,86,5
+SYNZ,Butcher Br,33,R3,137,2.60,89,6
+SYNZ,Yo Mangos,30,R3,204,0.12,87,6
+SYNZ,Bellion Lusk,32,R3,151,3.40,93,6
+SYNZ,learn2swim,32,R3,199,4.40,96,6
+SYNZ,SSFHT,30,R3,142,0.97,92,6
+SYNZ,NGotcha,31,R3,172,0.42,82,6
+SYNZ,not urs,31,R3,175,0.95,93,5
+SYNZ,Lyla marie,32,R3,179,1.20,77,6
+SYNZ,DIREEK,32,R3,180,4.00,77,5
+SYNZ,Ahmed Hamza123,32,R3,176,11.40,82,6
+SYNZ,AmericanLimited,30,R3,191,0.19,73,5
+SYNZ,Shartbird,31,R3,231,1.10,93,7
+SYNZ,msergio1989,32,R3,163,2.20,99,5
+SYNZ,CGeldart,30,R3,138,0.72,72,4
+SYNZ,Comeaux7,32,R3,179,0.68,89,5
+SYNZ,vetman81,33,R3,139,0.37,93,4
+SYNZ,snoopy1004,33,R3,150,1.80,72,6
+SYNZ,eddy1587,31,R3,200,0.20,92,6
+SYNZ,uBaTcHu,31,R3,195,1.60,100,6
+SYNZ,Kara 74,33,R3,191,1.00,96,6
+SYNZ,Hobe King,34,R3,142,0.32,81,6
+SYNZ,Mutant Army,30,R3,132,0.15,78,4
+SYNZ,StarButterfly1,32,R3,192.3,3.90,82,6
+SYNZ,MsevenM7,32,R3,127,1.90,94,6
+SYNZ,Toxic,31,R3,151,0.53,77,5
+SYNZ,Nari,33,R3,167,3.50,96,6
+SYNZ,Matth,31,R3,156,3.00,82,6
+SYNZ,Que,30,R3,152,3.00,97,6
+SYNZ,Unifox0202,31,R3,155,0.83,77,5
+SYNZ,Slugzilla65,31,R3,150,0.27,76,5
+SYNZ,JonJedi,30,R3,183,0.50,83,6
+SYNZ,I van,32,R3,165,1.40,91,6
+SYNZ,stonecoldd,33,R3,169,1.70,88,6
+SYNZ,Fort Leal,30,R3,124,0.15,65,0
+SYNZ,WhiskeyontheRocks,32,R3,138,1.50,87,5
+SYNZ,nikopm,31,R3,158,1.70,71,4
+SYNZ,2SWEET,30,R3,131,0.12,81,4
+SYNZ,apple,30,R3,172,0.49,92,6
+SYNZ,Stu Stew,32,R3,171,1.30,78,5
+SYNZ,,,,,,,
+SYNZ,Higgins Az,30,R2,171,0.50,82,5
+SYNZ,COMPLEXO SINFOROSO,32,R2,136,0.40,80,6
+SYNZ,DOCTA,30,R2,153,0.25,73,5
+SYNZ,Stealth Shadow,30,R2,152,0.17,73,6
+SYNZ,Bboer128204,31,R2,179,3.10,84,5
+SYNZ,e1Feo,30,R2,139,0.26,91,6
+SYNZ,WTHELLYONTE,30,R2,85,0.01,59,0
+SYNZ,OOOOOF,31,R2,149,0.47,85,6
+SYNZ,Teddyyh,31,R2,67,0.21,36,4
+SYNZ,Major PDR,30,R2,112,0.11,76,3
+SYNZ,abiomon,30,R2,111,0.51,69,4
+SYNZ,ChampionK,30,R2,124,0.25,74,5
+SYNZ,Go,31,R2,145,4.40,77,6
+SYNZ,F A H Q,31,R2,118,0.13,92,5
+SYNZ,Qossay0021,30,R2,98,0.19,66,4
+SYNZ,Taz1979,30,R2,131,0.26,67,5
+SYNZ,Sainted7,30,R2,91,0.16,65,0
+SYNZ,King of the Koopas,30,R2,140,0.60,79,5
+SYNZ,Buddy1976,31,R2,151,0.11,78,5
+SYNZ,Underb00b,30,R2,103,0.11,65,5
+SYNZ,Storm0Shadow,30,R2,118,0.03,57,5
+SYNZ,TimeWaster80,30,R2,106,0.13,58,6
+SYNZ,xXKONGXx,30,R2,104,0.10,64,1
+SYNZ,Playverb miguel,31,R2,135,0.36,81,5
+SYNZ,Irfizzy,30,R2,147,0.08,72,0
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+pstk,DeepseekR2,33,R4,151,1.64,78,5
+pstk,SAMHAIN13,31,R4,199,15.16,97,6
+pstk,Troop Meek,30,R4,148,0.60,89,4
+pstk,Captain cold,30,R4,138,0.85,74,5
+pstk,Taiqi,32,R4,149,1.53,80,5
+pstk,Buff Master Griz,31,R4,153,1.56,78,6
+pstk,Explosive78,29,R4,108,0.37,79,3
+pstk,Savagelina8228,30,R4,142,0.14,76,5
+pstk,Spork,31,R4,177,0.75,85,6
+pstk,Tony595595,32,R4,181,0.75,81,5
+pstk,Pewpewpewwwwwww,33,R3,188,4.04,95,6
+pstk,FemShep,31,R3,143,1.34,82,5
+pstk,AnnJul1418,29,R3,122,0.11,71,5
+pstk,DEWstruction,30,R3,143,0.64,86,5
+pstk,Gaily Waily,31,R3,180,0.15,93,6
+pstk,unknown tree,31,R3,161,1.15,75,5
+pstk,Deepsea325,30,R3,144,0.57,86,5
+pstk,Filipino Thor,30,R3,69,,,
+pstk,Fort Graves,30,R3,164,0.64,75,4
+pstk,Johns Deere,30,R3,154,1.61,84,5
+pstk,KindAkito,27,R3,59,,,
+pstk,SR32,30,R3,161,,,
+pstk,ZachAttackMD,30,R3,137,0.25,74,6
+pstk,King Richard42,30,R3,63,,,
+pstk,LubeSplash,30,R3,109,0.13,68,0
+pstk,Miss Myth,30,R3,56,,,
+pstk,Qusqo,31,R3,140,0.19,,
+pstk,StoneColdKE,30,R3,69,,,
+pstk,Bloomverse,27,R3,62,,,
+pstk,Taterman001,29,R3,115,0.12,67,4
+pstk,The 1 and Only Dude,27,R3,110,0.58,57,4
+pstk,stinkfinger75,25,R3,114,0.13,,
+pstk,Rafaman13,29,R3,,,,
+pstk,Timbo8013,28,R3,139,0.36,,
+pstk,JP of Saint Helen,30,R3,102,,,
+pstk,Thomster,30,R3,173,0.19,88,5
+pstk,The1whoknox,30,R3,150,1.43,65,6
+pstk,BB 2,26,R2,31,,,
+pstk,CabaThePeia,30,R2,141,,,
+pstk,Cbolicious,30,R2,151,0.26,72,5
+pstk,Ct561,27,R2,108,0.24,,
+pstk,Kase R,29,R2,42,,,
+pstk,Bristolpete,30,R2,171,0.11,79,5
+pstk,CConrado,29,R2,43,,,
+pstk,Herbert1913,28,R2,26,,,
+pstk,martinez898,29,R2,42,,,
+pstk,BankThis,29,R2,48,,,
+pstk,Geocrat,30,R2,110,0.27,,
+pstk,SuKhoi,30,R2,56,,,
+pstk,Capt Bloodshart,27,R2,51,,,
+pstk,Whatf2,25,R2,46,,,
+pstk,NiceTodd,27,R2,,,,
+pstk,Master Chief 11,28,R2,,,,
+pstk,Lil 1109,30,R2,,,,
+pstk,JP of St Helena,30,R2,,,,
+pstk,Lord Commander Titus,24,R2,,,,
+pstk,Indocan,29,R2,,,,
+pstk,USMC1334,30,R2,156,0.96,55,5
+pstk,MonsterManGio,29,R2,,,,
+pstk,ViperKiller,30,R2,,,,
+pstk,Hawkeye777,30,R2,134,,,
+pstk,Dan15p,30,R2,,,,
+pstk,Elcapitan69,29,R2,,,,
+pstk,akaDAD,30,R2,,,,
+pstk,ArmyVet45thBK,30,R2,,,,
+pstk,Elimanute,30,R2,,,,
+pstk,Maddieekilluhh,29,R2,,,,
+pstk,SQLDB,32,R2,,,,
+pstk,F3rr1sb,29,R1,54,,,
+pstk,Kinglucho,25,R1,51,,,
+pstk,maddiebaddie,28,R1,44,,,
+pstk,Meerkatgreen,30,R1,53,,,
+pstk,meisalive,30,R1,65,,,
+pstk,Monster615,30,R1,54,,,
+pstk,Gypsyman,30,R1,54,,,
+pstk,PentaKillDJ,29,R1,57,,,
+pstk,Theaznsith,26,R1,44,,,
+pstk,TriniRey,29,R1,43,,,
+pstk,MonkeyRunning,28,R1,,,,
+pstk,Dev Marcel,30,R1,79,,,
+pstk,The Cuck Duck,31,R1,84,,,
+pstk,Commander Grizzle,31,,83,,,
+pstk,Bub777333,32,,59,,,
+pstk,Bigroc14,30,,88,,,
+pstk,Arowell,30,,89,,,
+pstk,ANGELUZ,23,,47,,,
+pstk,BradMF,32,,96,,,
+pstk,Srgt Payne,33,,99,,,
+pstk,TheHappyGuy,30,,99,,,
+pstk,chuckles21,28,,63,,,
+pstk,Dommandier,25,,34,,,
+pstk,E427,30,,94,,,
+pstk,SirFukcsley,29,,84,,,
+pstk,General8888,28,,76,,,
+pstk,J Harbs,28,,54,,,
+pstk,Jsmoke0,26,,54,,,
+pstk,K1LL3R DONUT,24,,55,,,
+pstk,Victoria AMS,30,,88,,,
