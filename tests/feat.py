@@ -2,9 +2,15 @@ import pandas as pd
 import numpy as np
 import featuretools as ft
 import os
+import argparse
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Rank players for recruitment')
+parser.add_argument('--alliance', type=str, help='Filter by alliance name (e.g., pstk, SYNZ)')
+args = parser.parse_args()
 
 # Read data from CSV file
 csv_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'synz.csv')
@@ -43,13 +49,13 @@ print(feature_matrix[available_cols].to_markdown())
 
 # 3. Use an ML model to interpret which generated feature is strongest
 # We can define a simple "Target Score" (e.g., a combination of stats)
-# Use non-linear weighting:
-# - Power: linear (base strength)
-# - Kills: log scale to penalize low kill counts exponentially, with high weight
-# - Level: quadratic to make higher levels (34 vs 33) more significant than lower levels (33 vs 32)
-feature_matrix['target_strength'] = (feature_matrix['Power'] * 1.0) + \
-                                    (np.log1p(feature_matrix['Kills']) * 18) + \
-                                    ((feature_matrix['Level'] - 29) ** 2) * 3
+# Power and level as primary factors, kills as secondary:
+# - Power: primary factor (multiplier 2.0)
+# - Kills: exponential weighting (power 1.5, multiplier 15) - bonus for activity
+# - Level: quadratic with strong multiplier (10.0) - progression heavily valued
+feature_matrix['target_strength'] = (feature_matrix['Power'] * 2.0) + \
+                                    (np.power(feature_matrix['Kills'], 1.5) * 15) + \
+                                    ((feature_matrix['Level'] - 29) ** 2) * 10
 
 # 4. Train a simple Linear Regression model to find a single composite score/coefficient
 # This model will try to predict our 'target_strength' using the generated features
@@ -71,8 +77,13 @@ feature_matrix.loc[features_for_model.index, 'Composite_Recruit_Score'] = normal
 
 print("\n--- Top 100 Players Ranked by Composite Recruit Score ---")
 ranked_players = feature_matrix.sort_values(by='Composite_Recruit_Score', ascending=False)
-display_cols = [col for col in ['Alliance', 'Member', 'Composite_Recruit_Score', 'Power', 'Kills', 'Level'] 
+display_cols = [col for col in ['Alliance', 'Member', 'Composite_Recruit_Score', 'Level', 'Kills', 'Power'] 
                 if col in ranked_players.columns]
+
+# Filter by alliance if specified
+if args.alliance:
+    ranked_players = ranked_players[ranked_players['Alliance'].str.lower() == args.alliance.lower()]
+    print(f"\nFiltered by alliance: {args.alliance}")
 
 # Split into top 100 and consideration list
 top_100 = ranked_players.head(100)
