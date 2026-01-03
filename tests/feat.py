@@ -9,6 +9,8 @@ from sklearn.linear_model import LinearRegression
 # Read data from CSV file
 csv_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'synz.csv')
 df = pd.read_csv(csv_path)
+# Rename columns to remove units
+df = df.rename(columns={'Power (m)': 'Power', 'Kills (m)': 'Kills'})
 # Clean data: drop rows with missing essential stats
 df = df.dropna(subset=['Member', 'Power', 'Kills', 'Level', 'Prof Lvl', 'Gift Lvl'])
 
@@ -41,9 +43,13 @@ print(feature_matrix[available_cols].to_markdown())
 
 # 3. Use an ML model to interpret which generated feature is strongest
 # We can define a simple "Target Score" (e.g., a combination of stats)
-feature_matrix['target_strength'] = (feature_matrix['Power'] * 0.1) + \
-                                    (feature_matrix['Kills'] * 2) + \
-                                    (feature_matrix['Level'] * 10)
+# Use non-linear weighting:
+# - Power: linear (base strength)
+# - Kills: log scale to penalize low kill counts exponentially, with high weight
+# - Level: quadratic to make higher levels (34 vs 33) more significant than lower levels (33 vs 32)
+feature_matrix['target_strength'] = (feature_matrix['Power'] * 1.0) + \
+                                    (np.log1p(feature_matrix['Kills']) * 18) + \
+                                    ((feature_matrix['Level'] - 29) ** 2) * 3
 
 # 4. Train a simple Linear Regression model to find a single composite score/coefficient
 # This model will try to predict our 'target_strength' using the generated features
@@ -63,20 +69,44 @@ max_score = composite_scores.max()
 normalized_scores = ((composite_scores - min_score) / (max_score - min_score)) * 100
 feature_matrix.loc[features_for_model.index, 'Composite_Recruit_Score'] = normalized_scores
 
-print("\n--- Players Ranked by Composite Recruit Score (Higher is better) ---")
+print("\n--- Top 100 Players Ranked by Composite Recruit Score ---")
 ranked_players = feature_matrix.sort_values(by='Composite_Recruit_Score', ascending=False)
 display_cols = [col for col in ['Alliance', 'Member', 'Composite_Recruit_Score', 'Power', 'Kills', 'Level'] 
                 if col in ranked_players.columns]
-# Format Composite_Recruit_Score to 1 decimal place
-display_df = ranked_players[display_cols].copy()
+
+# Split into top 100 and consideration list
+top_100 = ranked_players.head(100)
+consideration = ranked_players.iloc[100:]
+
+# Format and display top 100
+display_df = top_100[display_cols].copy()
 if 'Composite_Recruit_Score' in display_df.columns:
     display_df['Composite_Recruit_Score'] = display_df['Composite_Recruit_Score'].round(1)
-# Add rank as the first column
 display_df.insert(0, 'Rank', range(1, len(display_df) + 1))
 print(display_df.to_markdown(index=False))
 
-# Count players by alliance
-print("\n--- Player Count by Alliance ---")
-alliance_counts = feature_matrix['Alliance'].value_counts().sort_values(ascending=False)
-for alliance, count in alliance_counts.items():
-    print(f"{alliance}: {count} players")
+# Display consideration list
+if len(consideration) > 0:
+    print("\n--- Consideration Table (Ranked 101+) ---")
+    consideration_df = consideration[display_cols].copy()
+    if 'Composite_Recruit_Score' in consideration_df.columns:
+        consideration_df['Composite_Recruit_Score'] = consideration_df['Composite_Recruit_Score'].round(1)
+    consideration_df.insert(0, 'Rank', range(101, 101 + len(consideration_df)))
+    print(consideration_df.to_markdown(index=False))
+
+# Count players by alliance (for top 100)
+print("\n--- Player Count by Alliance (Top 100) ---")
+top_100_alliance_counts = top_100['Alliance'].value_counts().sort_values(ascending=False)
+alliance_df = pd.DataFrame({'Alliance': top_100_alliance_counts.index, 'Count': top_100_alliance_counts.values})
+print(alliance_df.to_markdown(index=False))
+
+# Aggregated statistics (for top 100 only)
+print("\n--- Aggregated Statistics (Top 100 Players) ---")
+total_power = top_100['Power'].sum()
+total_kills = top_100['Kills'].sum()
+stats_df = pd.DataFrame({'Metric': ['Total Power', 'Total Kills'], 'Value': [f"{total_power:.0f}", f"{total_kills:.2f}"]})
+print(stats_df.to_markdown(index=False))
+
+# Count by level (for top 100)
+print("\n--- Player Count by Level (Top 100) ---")
+level_counts = top_100['Level'].value_counts().sort_values(ascending=False)

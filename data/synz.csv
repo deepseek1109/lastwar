@@ -1,4 +1,4 @@
-Alliance,Member,Level,Rank,Power,Kills,Prof Lvl,Gift Lvl
+Alliance,Member,Level,Rank,Power (m),Kills (m),Prof Lvl,Gift Lvl
 SYNZ,Samyslims,32,R5,158,4.50,82,8
 SYNZ,,,,,,,
 SYNZ,cutesnugglybear,33,R4,168,7.10,100,7
@@ -115,17 +115,17 @@ pstk,DEWstruction,30,R3,143,0.64,86,5
 pstk,Gaily Waily,31,R3,180,0.15,93,6
 pstk,unknown tree,31,R3,161,1.15,75,5
 pstk,Deepsea325,30,R3,144,0.57,86,5
-pstk,Filipino Thor,30,R3,69,,,
+pstk,Filipino Thor,30,R3,124,1.00,70,4
 pstk,Fort Graves,30,R3,164,0.64,75,4
 pstk,Johns Deere,30,R3,154,1.61,84,5
 pstk,KindAkito,27,R3,59,,,
-pstk,SR32,30,R3,161,,,
+pstk,SR32,30,R3,161,0.09,72,6
 pstk,ZachAttackMD,30,R3,137,0.25,74,6
 pstk,King Richard42,30,R3,63,,,
 pstk,LubeSplash,30,R3,109,0.13,68,0
 pstk,Miss Myth,30,R3,56,,,
 pstk,Qusqo,31,R3,140,0.19,,
-pstk,StoneColdKE,30,R3,69,,,
+pstk,StoneColdKE,30,R3,128,0.05,,
 pstk,Bloomverse,27,R3,62,,,
 pstk,Taterman001,29,R3,115,0.12,67,4
 pstk,The 1 and Only Dude,27,R3,110,0.58,57,4
@@ -145,7 +145,7 @@ pstk,CConrado,29,R2,43,,,
 pstk,Herbert1913,28,R2,26,,,
 pstk,martinez898,29,R2,42,,,
 pstk,BankThis,29,R2,48,,,
-pstk,Geocrat,30,R2,110,0.27,,
+pstk,Geocrat,30,R2,110,0.27,73,4
 pstk,SuKhoi,30,R2,56,,,
 pstk,Capt Bloodshart,27,R2,51,,,
 pstk,Whatf2,25,R2,46,,,
@@ -156,7 +156,7 @@ pstk,JP of St Helena,30,R2,,,,
 pstk,Lord Commander Titus,24,R2,,,,
 pstk,Indocan,29,R2,,,,
 pstk,USMC1334,30,R2,156,0.96,55,5
-pstk,MonsterManGio,29,R2,,,,
+pstk,MonsterManGio,29,R2,121,0.09,60,5
 pstk,ViperKiller,30,R2,,,,
 pstk,Hawkeye777,30,R2,134,,,
 pstk,Dan15p,30,R2,,,,
@@ -171,11 +171,11 @@ pstk,Kinglucho,25,R1,51,,,
 pstk,maddiebaddie,28,R1,44,,,
 pstk,Meerkatgreen,30,R1,53,,,
 pstk,meisalive,30,R1,65,,,
-pstk,Monster615,30,R1,54,,,
-pstk,Gypsyman,30,R1,54,,,
+pstk,Monster615,30,,54,,,
+pstk,Gypsyman,30,,54,,,
 pstk,PentaKillDJ,29,R1,57,,,
 pstk,Theaznsith,26,R1,44,,,
-pstk,TriniRey,29,R1,43,,,
+pstk,TriniRey,29,,43,,,
 pstk,MonkeyRunning,28,R1,,,,
 pstk,Dev Marcel,30,R1,79,,,
 pstk,The Cuck Duck,31,R1,84,,,
