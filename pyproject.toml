@@ -6,6 +6,8 @@ requires-python = ">=3.9" # Scikit-learn requires Python >=3.9
 dependencies = [
     "pandas",
     "scikit-learn",
+    "xgboost",
+    "featuretools",
     "matplotlib",
     "tabulate",
 ]
