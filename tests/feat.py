@@ -10,6 +10,9 @@ from sklearn.linear_model import LinearRegression
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='Rank players for recruitment')
 parser.add_argument('--alliance', type=str, help='Filter by alliance name (e.g., pstk, SYNZ)')
+parser.add_argument('--format', type=str, choices=['table', 'simple', 'markdown', 'bullet'], default='table',
+                    help='Output format: table (default), simple (player_id, Power, Kills, Level), markdown, or bullet')
+parser.add_argument('--top', type=int, default=100, help='Number of top players to display (default: 100)')
 args = parser.parse_args()
 
 # Read data from CSV file
@@ -85,39 +88,64 @@ if args.alliance:
     ranked_players = ranked_players[ranked_players['Alliance'].str.lower() == args.alliance.lower()]
     print(f"\nFiltered by alliance: {args.alliance}")
 
-# Split into top 100 and consideration list
-top_100 = ranked_players.head(100)
-consideration = ranked_players.iloc[100:]
+# Get top N players
+top_n = ranked_players.head(args.top)
 
-# Format and display top 100
-display_df = top_100[display_cols].copy()
-if 'Composite_Recruit_Score' in display_df.columns:
-    display_df['Composite_Recruit_Score'] = display_df['Composite_Recruit_Score'].round(1)
-display_df.insert(0, 'Rank', range(1, len(display_df) + 1))
-print(display_df.to_markdown(index=False))
+# Format output based on --format argument
+if args.format == 'simple':
+    # Simple format: player_id, Power, Kills, Level
+    print("\n--- Top {} Players (Simple Format) ---".format(args.top))
+    simple_cols = [col for col in ['Power', 'Kills', 'Level'] if col in top_n.columns]
+    simple_df = top_n[simple_cols].copy()
+    print(simple_df.to_markdown())
+elif args.format == 'bullet':
+    # Bullet format: rank. name (kills=X, level=Y, power=Z)
+    print("\n--- Top {} Players (Bullet Format) ---".format(args.top))
+    for idx, (player_id, row) in enumerate(top_n.iterrows(), 1):
+        kills = row['Kills']
+        level = row['Level']
+        power = row['Power']
+        print(f"- {idx}. {player_id} (kills={kills}, level={level}, power={power})")
+elif args.format == 'markdown':
+    # Markdown format: full details
+    print("\n--- Top {} Players (Markdown Format) ---".format(args.top))
+    display_df = top_n[display_cols].copy()
+    if 'Composite_Recruit_Score' in display_df.columns:
+        display_df['Composite_Recruit_Score'] = display_df['Composite_Recruit_Score'].round(1)
+    display_df.insert(0, 'Rank', range(1, len(display_df) + 1))
+    print(display_df.to_markdown(index=False))
+else:
+    # Default table format
+    print("\n--- Top {} Players Ranked by Composite Recruit Score ---".format(args.top))
+    display_df = top_n[display_cols].copy()
+    if 'Composite_Recruit_Score' in display_df.columns:
+        display_df['Composite_Recruit_Score'] = display_df['Composite_Recruit_Score'].round(1)
+    display_df.insert(0, 'Rank', range(1, len(display_df) + 1))
+    print(display_df.to_markdown(index=False))
 
-# Display consideration list
-if len(consideration) > 0:
-    print("\n--- Consideration Table (Ranked 101+) ---")
-    consideration_df = consideration[display_cols].copy()
-    if 'Composite_Recruit_Score' in consideration_df.columns:
-        consideration_df['Composite_Recruit_Score'] = consideration_df['Composite_Recruit_Score'].round(1)
-    consideration_df.insert(0, 'Rank', range(101, 101 + len(consideration_df)))
-    print(consideration_df.to_markdown(index=False))
+    # Display consideration list
+    consideration = ranked_players.iloc[args.top:]
+    if len(consideration) > 0:
+        print("\n--- Consideration Table (Ranked {}+) ---".format(args.top + 1))
+        consideration_df = consideration[display_cols].copy()
+        if 'Composite_Recruit_Score' in consideration_df.columns:
+            consideration_df['Composite_Recruit_Score'] = consideration_df['Composite_Recruit_Score'].round(1)
+        consideration_df.insert(0, 'Rank', range(args.top + 1, args.top + 1 + len(consideration_df)))
+        print(consideration_df.to_markdown(index=False))
 
-# Count players by alliance (for top 100)
-print("\n--- Player Count by Alliance (Top 100) ---")
-top_100_alliance_counts = top_100['Alliance'].value_counts().sort_values(ascending=False)
-alliance_df = pd.DataFrame({'Alliance': top_100_alliance_counts.index, 'Count': top_100_alliance_counts.values})
-print(alliance_df.to_markdown(index=False))
+    # Count players by alliance
+    print("\n--- Player Count by Alliance (Top {}) ---".format(args.top))
+    top_alliance_counts = top_n['Alliance'].value_counts().sort_values(ascending=False)
+    alliance_df = pd.DataFrame({'Alliance': top_alliance_counts.index, 'Count': top_alliance_counts.values})
+    print(alliance_df.to_markdown(index=False))
 
-# Aggregated statistics (for top 100 only)
-print("\n--- Aggregated Statistics (Top 100 Players) ---")
-total_power = top_100['Power'].sum()
-total_kills = top_100['Kills'].sum()
-stats_df = pd.DataFrame({'Metric': ['Total Power', 'Total Kills'], 'Value': [f"{total_power:.0f}", f"{total_kills:.2f}"]})
-print(stats_df.to_markdown(index=False))
+    # Aggregated statistics
+    print("\n--- Aggregated Statistics (Top {} Players) ---".format(args.top))
+    total_power = top_n['Power'].sum()
+    total_kills = top_n['Kills'].sum()
+    stats_df = pd.DataFrame({'Metric': ['Total Power', 'Total Kills'], 'Value': [f"{total_power:.0f}", f"{total_kills:.2f}"]})
+    print(stats_df.to_markdown(index=False))
 
-# Count by level (for top 100)
-print("\n--- Player Count by Level (Top 100) ---")
-level_counts = top_100['Level'].value_counts().sort_values(ascending=False)
+    # Count by level
+    print("\n--- Player Count by Level (Top {}) ---".format(args.top))
+    level_counts = top_n['Level'].value_counts().sort_values(ascending=False)
