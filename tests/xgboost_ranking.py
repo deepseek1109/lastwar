@@ -48,7 +48,45 @@ def create_value_score(df):
     return value_score
 
 
-def rank_players_xgboost(filepath, alliance_filter=None):
+def detect_alt_accounts(df):
+    """
+    Detect likely alternative/inactive accounts using strict heuristics.
+    These patterns indicate abandoned or low-activity accounts:
+    
+    1. Very low kills (<0.3) regardless of other stats - clear abandonment
+    2. Level 30+ with Power <100 - abandoned high-level (not actively played)
+    3. Level 30+ with Kills <0.5 with Power <180 - level-up only, zero combat engagement
+    4. Low effort accounts: Prof Lvl and Gift Lvl are statistical outliers (below Q1 - 1.5*IQR)
+    """
+    # Pattern 1: Near-zero kills = clearly inactive
+    zero_kills = df['Kills'] < 0.3
+    
+    # Pattern 2: High level but tiny power (level-boosted but not developed)
+    abandoned_high_level = (df['Level'] >= 30) & (df['Power'] < 100)
+    
+    # Pattern 3: Multiple high-level accounts with minimal kills (farm/alts)
+    minimal_combat = (df['Level'] >= 30) & (df['Kills'] < 0.5) & (df['Power'] < 180)
+    
+    # Pattern 4: Low effort accounts - use IQR-based outlier detection
+    # Calculate outlier thresholds for Prof Lvl and Gift Lvl
+    prof_q1 = df['Prof Lvl'].quantile(0.25)
+    prof_iqr = df['Prof Lvl'].quantile(0.75) - prof_q1
+    prof_threshold = prof_q1 - 1.5 * prof_iqr
+    
+    gift_q1 = df['Gift Lvl'].quantile(0.25)
+    gift_iqr = df['Gift Lvl'].quantile(0.75) - gift_q1
+    gift_threshold = gift_q1 - 1.5 * gift_iqr
+    
+    # Flag accounts where BOTH Prof Lvl and Gift Lvl are statistical outliers (very low)
+    low_effort = (df['Prof Lvl'] <= prof_threshold) & (df['Gift Lvl'] <= gift_threshold)
+    
+    # Combine: flag if ANY pattern matches
+    alt_mask = zero_kills | abandoned_high_level | minimal_combat | low_effort
+    
+    return alt_mask
+
+
+def rank_players_xgboost(filepath, alliance_filter=None, blocklist=None):
     """
     Rank players by predicted value using XGBoost + Isolation Forest.
     
@@ -149,16 +187,12 @@ def rank_players_xgboost(filepath, alliance_filter=None):
         print(f"  {row['Feature']}: {row['Importance']:.4f}")
     print()
     
-    # --- 4. ACTIVITY DETECTION: FLAG LOW-ACTIVITY PLAYERS ---
-    # Define inactive players as those with low kills relative to their level/power
-    # High kills indicate active engagement, low kills indicate potential inactivity
+    # --- 4. ANOMALY DETECTION: HEURISTIC-BASED INACTIVE DETECTION ONLY ---
+    # DO NOT use Isolation Forest - it flags high-kill players as outliers
+    # Instead, use explicit heuristics to catch abandoned/alt accounts
     
-    # Create activity score: kills per level (normalized)
-    df['Activity_Score'] = df['Kills'] / (df['Level'] + 1)
-    
-    # Flag as inactive if kills are in the bottom 20% (meaning low engagement)
-    activity_threshold = df['Kills'].quantile(0.15)  # Bottom 15%
-    df['Is_Anomaly'] = df['Kills'] < activity_threshold
+    # Add heuristic-based alt account detection
+    df['Is_Anomaly'] = detect_alt_accounts(df)
     
     # --- 5. RANK AND OUTPUT ---
     # Sort by predicted value (descending)
@@ -201,7 +235,7 @@ def rank_players_xgboost(filepath, alliance_filter=None):
     # Anomaly breakdown
     if anomaly_count > 0:
         print("⚠️  FLAGGED PLAYERS (Potential Inactive Accounts):")
-        anomalies = df_ranked[df_ranked['Is_Anomaly']][['Member', 'Level', 'Power', 'Kills', 'Predicted_Value']]
+        anomalies = df_ranked[df_ranked['Is_Anomaly']][['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 'Predicted_Value']]
         print(anomalies.to_string(index=False))
         print()
     
