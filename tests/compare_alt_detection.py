@@ -114,7 +114,7 @@ def detect_alt_kmeans(df):
     return (clusters == low_engagement_cluster).astype(int)
 
 
-def compare_methods(filepath, alliance_filter=None):
+def compare_methods(filepath, alliance_filter=None, markdown=False):
     """Compare all detection methods"""
     
     # Load data
@@ -134,11 +134,6 @@ def compare_methods(filepath, alliance_filter=None):
         print("Error: No valid data.")
         return None
     
-    print(f"\n{'='*100}")
-    print(f"ALTERNATIVE ACCOUNT DETECTION COMPARISON")
-    print(f"{'='*100}")
-    print(f"Total Players: {len(df)}\n")
-    
     # Apply all detection methods
     df['Heuristic'] = detect_alt_heuristic(df)
     df['IsolationForest'] = detect_alt_isolation_forest(df)
@@ -148,55 +143,112 @@ def compare_methods(filepath, alliance_filter=None):
     
     # Count flags by method
     detection_cols = ['Heuristic', 'IsolationForest', 'LOF', 'ZScore', 'KMeans']
-    df['Flags'] = df[detection_cols].sum(axis=1)  # How many methods flagged this player
+    df['Flags'] = df[detection_cols].sum(axis=1)
     
-    # Print summary statistics
-    print("Detection Method Summary:")
-    for method in detection_cols:
-        count = df[method].sum()
-        pct = 100 * count / len(df)
-        print(f"  {method:20s}: {count:4d} players ({pct:5.1f}%)")
-    
-    print(f"\nConsensus Detection (flagged by 3+ methods):")
-    consensus = (df['Flags'] >= 3)
-    print(f"  Players: {consensus.sum()} ({100*consensus.sum()/len(df):.1f}%)")
-    
-    # Show "Teddyyh" if present
-    print(f"\n{'='*100}")
-    print("LOOKUP: Searching for 'Teddyyh'...")
-    teddyyh = df[df['Member'].str.contains('Teddyyh', case=False, na=False)]
-    if not teddyyh.empty:
-        print(f"{'='*100}")
-        print(f"Found: Teddyyh")
-        print(teddyyh[['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 
-                       'Heuristic', 'IsolationForest', 'LOF', 'ZScore', 'KMeans', 'Flags']].to_string(index=False))
+    if markdown:
+        print("# Alternative Account Detection Comparison\n")
+        print(f"**Total Players Analyzed:** {len(df)}\n")
         
-        flags = teddyyh['Flags'].values[0]
-        methods_flagged = teddyyh[detection_cols].values[0]
-        flagged_by = [detection_cols[i] for i in range(len(detection_cols)) if methods_flagged[i] == 1]
-        print(f"\nTeddyyh flagged by {flags}/5 methods: {', '.join(flagged_by)}")
+        # Method summary
+        print("## Detection Method Summary\n")
+        print("| Method | Count | Percentage |")
+        print("|--------|-------|------------|")
+        for method in detection_cols:
+            count = df[method].sum()
+            pct = 100 * count / len(df)
+            print(f"| {method} | {count} | {pct:.1f}% |")
+        
+        # Consensus
+        consensus = (df['Flags'] >= 3)
+        print(f"\n**Consensus Detection (3+ methods):** {consensus.sum()} players ({100*consensus.sum()/len(df):.1f}%)\n")
+        
+        # Teddyyh lookup
+        teddyyh = df[df['Member'].str.contains('Teddyyh', case=False, na=False)]
+        if not teddyyh.empty:
+            flags = teddyyh['Flags'].values[0]
+            row = teddyyh.iloc[0]
+            print("## Teddyyh Lookup\n")
+            print(f"| Stat | Value |")
+            print("|------|-------|")
+            print(f"| Member | {row['Member']} |")
+            print(f"| Level | {row['Level']} |")
+            print(f"| Power | {row['Power']} |")
+            print(f"| Kills | {row['Kills']} |")
+            print(f"| Prof Lvl | {row['Prof Lvl']} |")
+            print(f"| Gift Lvl | {row['Gift Lvl']} |")
+            print(f"| Flags | **{flags}/5** ✅ |")
+            
+            methods_flagged = teddyyh[detection_cols].values[0]
+            flagged_by = [detection_cols[i] for i in range(len(detection_cols)) if methods_flagged[i] == 1]
+            print(f"\n**Flagged by:** {', '.join(flagged_by)}\n")
+        
+        # Top flagged (4+ methods)
+        top_flagged = df[df['Flags'] >= 4].sort_values('Flags', ascending=False)
+        if not top_flagged.empty:
+            print("## High-Confidence Alt Accounts (4+ methods agree)\n")
+            print("| Member | Level | Power | Kills | Prof Lvl | Gift Lvl | Flags |")
+            print("|--------|-------|-------|-------|----------|----------|-------|")
+            for _, row in top_flagged.iterrows():
+                print(f"| {row['Member']} | {row['Level']:.0f} | {row['Power']:.0f} | {row['Kills']:.2f} | {row['Prof Lvl']:.0f} | {row['Gift Lvl']:.0f} | {row['Flags']:.0f} |")
+        
+        # Moderate consensus
+        moderate_flagged = df[(df['Flags'] == 3)].sort_values('Kills')
+        if not moderate_flagged.empty:
+            print("\n## Moderate Flagged (3 methods agree)\n")
+            print("| Member | Level | Power | Kills | Prof Lvl | Gift Lvl |")
+            print("|--------|-------|-------|-------|----------|----------|")
+            for _, row in moderate_flagged.head(15).iterrows():
+                print(f"| {row['Member']} | {row['Level']:.0f} | {row['Power']:.0f} | {row['Kills']:.2f} | {row['Prof Lvl']:.0f} | {row['Gift Lvl']:.0f} |")
     else:
-        print("Not found in dataset")
-    
-    # Show top flagged players (consensus)
-    print(f"\n{'='*100}")
-    print("TOP FLAGGED PLAYERS (by consensus - 4+ method agreement)")
-    print(f"{'='*100}")
-    top_flagged = df[df['Flags'] >= 4].sort_values('Flags', ascending=False)
-    if not top_flagged.empty:
-        print(top_flagged[['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 'Flags']].head(20).to_string(index=False))
-    else:
-        print("No players flagged by 4+ methods")
-    
-    # Show moderate consensus
-    print(f"\n{'='*100}")
-    print("MODERATE FLAGGED PLAYERS (by 3 method agreement)")
-    print(f"{'='*100}")
-    moderate_flagged = df[(df['Flags'] == 3)].sort_values('Flags', ascending=False)
-    if not moderate_flagged.empty:
-        print(moderate_flagged[['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 'Flags']].head(20).to_string(index=False))
-    else:
-        print("No players flagged by exactly 3 methods")
+        # Original console output
+        print(f"\n{'='*100}")
+        print(f"ALTERNATIVE ACCOUNT DETECTION COMPARISON")
+        print(f"{'='*100}")
+        print(f"Total Players: {len(df)}\n")
+        
+        print("Detection Method Summary:")
+        for method in detection_cols:
+            count = df[method].sum()
+            pct = 100 * count / len(df)
+            print(f"  {method:20s}: {count:4d} players ({pct:5.1f}%)")
+        
+        consensus = (df['Flags'] >= 3)
+        print(f"\nConsensus Detection (flagged by 3+ methods):")
+        print(f"  Players: {consensus.sum()} ({100*consensus.sum()/len(df):.1f}%)")
+        
+        print(f"\n{'='*100}")
+        print("LOOKUP: Searching for 'Teddyyh'...")
+        teddyyh = df[df['Member'].str.contains('Teddyyh', case=False, na=False)]
+        if not teddyyh.empty:
+            print(f"{'='*100}")
+            print(f"Found: Teddyyh")
+            print(teddyyh[['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 
+                           'Heuristic', 'IsolationForest', 'LOF', 'ZScore', 'KMeans', 'Flags']].to_string(index=False))
+            
+            flags = teddyyh['Flags'].values[0]
+            methods_flagged = teddyyh[detection_cols].values[0]
+            flagged_by = [detection_cols[i] for i in range(len(detection_cols)) if methods_flagged[i] == 1]
+            print(f"\nTeddyyh flagged by {flags}/5 methods: {', '.join(flagged_by)}")
+        else:
+            print("Not found in dataset")
+        
+        print(f"\n{'='*100}")
+        print("TOP FLAGGED PLAYERS (by consensus - 4+ method agreement)")
+        print(f"{'='*100}")
+        top_flagged = df[df['Flags'] >= 4].sort_values('Flags', ascending=False)
+        if not top_flagged.empty:
+            print(top_flagged[['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 'Flags']].head(20).to_string(index=False))
+        else:
+            print("No players flagged by 4+ methods")
+        
+        print(f"\n{'='*100}")
+        print("MODERATE FLAGGED PLAYERS (by 3 method agreement)")
+        print(f"{'='*100}")
+        moderate_flagged = df[(df['Flags'] == 3)].sort_values('Flags', ascending=False)
+        if not moderate_flagged.empty:
+            print(moderate_flagged[['Member', 'Level', 'Power', 'Kills', 'Prof Lvl', 'Gift Lvl', 'Flags']].head(20).to_string(index=False))
+        else:
+            print("No players flagged by exactly 3 methods")
     
     return df
 
@@ -205,8 +257,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Compare ML methods for alt account detection')
     parser.add_argument('--alliance', type=str, help='Filter by alliance name')
     parser.add_argument('--file', type=str, default='../data/synz.csv', help='CSV file path')
+    parser.add_argument('--markdown', action='store_true', help='Output as markdown')
     
     args = parser.parse_args()
     csv_path = os.path.join(os.path.dirname(__file__), args.file)
     
-    result_df = compare_methods(csv_path, alliance_filter=args.alliance)
+    result_df = compare_methods(csv_path, alliance_filter=args.alliance, markdown=args.markdown)
