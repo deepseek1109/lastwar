@@ -12,7 +12,7 @@
 | ZScore | 11 | 9.6% |
 | KMeans | 38 | 33.3% |
 
-**Consensus Detection (3+ methods):** 12 players (10.5%)
+**Consensus Detection (3+ methods):** 9 players (7.9%)
 
 ## Teddyyh Lookup
 
@@ -46,6 +46,3 @@
 |--------|-------|-------|-------|----------|----------|
 | xXKONGXx | 30 | 104 | 0.10 | 64 | 1 |
 | Ronin455 | 32 | 291 | 0.66 | 100 | 5 |
-| Ahmed Hamza123 | 32 | 176 | 11.40 | 82 | 6 |
-| Vyper | 34 | 280 | 13.10 | 100 | 12 |
-| SAMHAIN13 | 31 | 199 | 15.16 | 97 | 6 |

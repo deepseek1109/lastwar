@@ -37,6 +37,13 @@ def detect_alt_heuristic(df):
     low_effort = (df['Prof Lvl'] <= prof_threshold) & (df['Gift Lvl'] <= gift_threshold)
     
     alt_mask = zero_kills | abandoned_high_level | minimal_combat | low_effort
+    
+    # IMPORTANT: Exclude highly active players (top 25% by kills) from alt account classification
+    # High kills indicates significant effort investment regardless of other metrics
+    kills_75th_percentile = df['Kills'].quantile(0.75)
+    highly_active = df['Kills'] >= kills_75th_percentile
+    alt_mask = alt_mask & ~highly_active
+    
     return alt_mask.astype(int)
 
 
@@ -144,6 +151,11 @@ def compare_methods(filepath, alliance_filter=None, markdown=False):
     # Count flags by method
     detection_cols = ['Heuristic', 'IsolationForest', 'LOF', 'ZScore', 'KMeans']
     df['Flags'] = df[detection_cols].sum(axis=1)
+    
+    # Filter out false positives: highly active players (Kills >= 10) should not be considered alts
+    # even if flagged by other methods
+    highly_active_mask = df['Kills'] >= 10
+    df.loc[highly_active_mask, 'Flags'] = 0
     
     if markdown:
         print("# Alternative Account Detection Comparison\n")
