@@ -58,3 +58,32 @@ Assuming a full 100-member alliance and focusing only on these nodes:
 | Hardcore (P2P)        |          1,100,000 |         ~33 Days |
 
 Assuming pstk now tech tree moving at 1/3 rate of SYNZ. It might `add 10~15 days` to catch the worthy tech nodes. `~60` days to eliminate the tech tree gap.
+
+# Reference
+
+## Alliance Donation Analysis
+
+Daily Contribution Breakdown
+* Free Donations: You gain 1 donation chance every 20 minutes, totaling 72 chances per 24 hours.
+* Average Points per Donation: A standard donation provides roughly 100 base points.
+* Critical Hits (Crits): Randomized multipliers (x2, x5, x10) significantly boost the total. With average luck, 72 free donations typically result in 7,000+ points without spending gems.
+* Diamond Donations: Players can donate up to 50 additional times using diamonds. Spending until the 50-diamond cost milestone adds roughly 2,300 points to the daily total. 
+
+Common Alliance Targets
+* Most competitive alliances set daily or weekly minimums to ensure steady tech progression:
+* Minimum Daily Requirement: Often set at 5,500 to 6,000 points to ensure basic activity.
+* High-Activity Target: Active players who never let their donation stack (max 25) hit 0 often reach 8,500 points without diamonds.
+* Weekly Minimums: Frequently set around 30,000 to 40,000 points. 
+
+Tips for Maximizing Contribution
+* The "Reset Strategy": Save your 20-25 donation chances for the daily reset. Use them all at once to increase your chances of hitting high-multiplier crits and securing top daily ranking rewards.
+* Priority Tech: Always donate to the technology marked with a star (Priority) by Alliance Leaders. This often provides a +20% bonus to contribution rewards.
+* Avoid Over-stacking: Your donation chances stop accumulating once they reach 25. Check in at least every 8 hours to ensure you aren't wasting potential free donations. 
+
+Estimated Time to Reach 8.0 Million EXP
+Assuming all 100 members are active:
+| Player Activity Level | Avg. Daily EXP per Player | Total Alliance Daily EXP | Days to reach 8.0M |
+| --------------------- | ------------------------: | -----------------------: | -----------------: |
+| Moderate (F2P)        |                    ~6,500 |                  650,000 |         ~12.3 Days |
+| High (F2P + Luck)     |                    ~7,700 |                  770,000 |         ~10.4 Days |
+| Hardcore (Daimonds)   |                  ~10,000+ |               1,000,000+ |          ~8.0 Days |
