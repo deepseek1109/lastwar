@@ -1,5 +1,14 @@
-## 1. Allication Tech Tree Audit
 
+- [Alliance Donation](#alliance-donation)
+  - [Allication Tech Tree Audit](#allication-tech-tree-audit)
+    - [Development Tree](#development-tree)
+    - [War Tree](#war-tree)
+  - [Estimated Catch-up Timeline](#estimated-catch-up-timeline)
+- [Reference](#reference)
+  - [Alliance Donation Analysis](#alliance-donation-analysis)
+
+# Alliance Donation
+## Allication Tech Tree Audit
 
 * Pstk tree (read as top to down, left to right)
 ```
@@ -38,7 +47,7 @@ War
 | 15   | Veteran Craftsman  |       9 |       7 | SYNZ Behind |        10,500,000 |
 |      | Total Dev Gap      |         |         |             |   ~**35,500,000** |
 
-### War Tree (Shared Tech)
+### War Tree
 
 | Node | Name               | PSTK Lv | SYNZ Lv | Status      | Estimated EXP Gap |
 | ---- | ------------------ | ------: | ------: | ----------- | ----------------: |
