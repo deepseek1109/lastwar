@@ -63,10 +63,12 @@ gantt
 ## Result
 * We observed warlord average damage:
     * average from last 2 Marshal Guards
+
 $$\frac{53.36\mathbf{G} + 35.6\mathbf{G}}{19 + 14} = 2.696\mathbf{G}$$
 
 * With this plan, **warlord** may generate damanage optimallly:
-  $$ 81\text{ attacks} \times 2.696\mathbf{G} = \mathbf{218.376G}$$
+
+$$ 81\text{ attacks} \times 2.696\mathbf{G} = \mathbf{218.376G}$$
 
 But with marching time between bases to target, it's impossible to attack 81 times; however, the estimated damange from other players can make up gap:
 * Everyone with 40+m 1st squad may easily generate **20+G** 
