@@ -1,6 +1,6 @@
 
 - [Alliance Donation](#alliance-donation)
-  - [Allication Tech Tree Audit](#allication-tech-tree-audit)
+  - [Alliance Tech Tree Audit](#alliance-tech-tree-audit)
     - [Development Tree](#development-tree)
     - [War Tree](#war-tree)
   - [Estimated Catch-up Timeline](#estimated-catch-up-timeline)
@@ -8,9 +8,9 @@
   - [Alliance Donation Analysis](#alliance-donation-analysis)
 
 # Alliance Donation
-## Allication Tech Tree Audit
+## Alliance Tech Tree Audit
 
-* Pstk tree (read as top to down, left to right)
+* PSTK tree (read top to bottom, left to right)
 ```
 Dev: 10,9,7,5,7,7,8,8,10,2,2,3,4,3,9
 War: 4,4,5,4,4,4,7,8,8,8,3,4,4,4,5
@@ -24,7 +24,7 @@ War: 2,5,4,1,1,1,1,2,2,2,2,2,2,2,4
 * Nodes of note
 ```
 Dev:
-2. Quick Construction (pstk:8 vs SYNZ:9)
+2. Quick Construction (PSTK:9 vs SYNZ:8)
 3. Great Helper (pstk:7 vs SYNZ:8)
 7. Coin Output
 8. Quick Research
@@ -62,11 +62,11 @@ Assuming a full 100-member alliance and focusing only on these nodes:
 
 | Activity Level        | Daily Alliance EXP | Days to Catch Up |
 | --------------------- | -----------------: | ---------------: |
-| Standard (F2P Active) |            770,000 |       `~47` Days |
+| Standard (F2P Active) |            770,000 |     **~47 Days** |
 | Optimized (F2P+P2P)   |            924,000 |         ~39 Days |
 | Hardcore (P2P)        |          1,100,000 |         ~33 Days |
 
-Assuming pstk now tech tree moving at 1/3 rate of SYNZ. It might `add 10~15 days` to catch the worthy tech nodes. `~60` days to eliminate the tech tree gap.
+Assuming PSTK's tech tree is moving at 1/3 the rate of SYNZ, it might add 10-15 days to catch the worthy tech nodes. ~60 days to eliminate the tech tree gap.
 
 # Reference
 
@@ -89,10 +89,9 @@ Tips for Maximizing Contribution
 * Priority Tech: Always donate to the technology marked with a star (Priority) by Alliance Leaders. This often provides a +20% bonus to contribution rewards.
 * Avoid Over-stacking: Your donation chances stop accumulating once they reach 25. Check in at least every 8 hours to ensure you aren't wasting potential free donations. 
 
-Estimated Time to Reach 8.0 Million EXP
-Assuming all 100 members are active:
-| Player Activity Level | Avg. Daily EXP per Player | Total Alliance Daily EXP | Days to reach 8.0M |
-| --------------------- | ------------------------: | -----------------------: | -----------------: |
-| Moderate (F2P)        |                    ~6,500 |                  650,000 |         ~12.3 Days |
-| High (F2P + Luck)     |                    ~7,700 |                  770,000 |         ~10.4 Days |
-| Hardcore (Daimonds)   |                  ~10,000+ |               1,000,000+ |          ~8.0 Days |
+Estimated Time to Reach 8.0 Million EXP (required for level 10 tech node), assuming all 100 members are active:
+| Player Activity Level     | Avg. Daily EXP per Player | Total Alliance Daily EXP | Days to reach 8.0M |
+| ------------------------- | ------------------------: | -----------------------: | -----------------: |
+| Moderate (F2P)            |                    ~6,500 |                  650,000 |           ~12 Days |
+| High (F2P + Luck)         |                    ~7,700 |                  770,000 |           ~10 Days |
+| Hardcore (spend diamonds) |                  ~10,000+ |               1,000,000+ |            ~8 Days |

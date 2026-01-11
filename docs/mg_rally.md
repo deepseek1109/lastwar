@@ -88,4 +88,4 @@ Due to marching time, 81 attacks from warlord may not be possible, but other pla
 - 40M+ 1st squad: ~20G damage
 - 30M+ 1st squad: ~10G damage
 
-In summary, destroying the Lv70 Worm is achievable.
+Previouly, we cracked worm to stage 3. With all the estimation, we double the damage. In summary, destroying the Lv70 Worm is achievable.
