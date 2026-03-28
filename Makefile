@@ -1,4 +1,4 @@
-.PHONY: help clean install dev test lint format
+.PHONY: help clean install dev test lint format publish
 
 help:
 	@echo "Available targets:"
@@ -6,6 +6,7 @@ help:
 	@echo "  make clean         - Remove .venv, __pycache__, .pyc files"
 	@echo "  make dev           - Install with dev dependencies"
 	@echo "  make test          - Run tests"
+	@echo "  make publish       - Regenerate docs/synz.md from data/synz2.csv"
 
 install:
 	@echo "Installing dependencies using uv..."
@@ -25,3 +26,7 @@ dev: install
 test:
 	@echo "Running tests..."
 	python -m pytest tests/ -v
+
+publish:
+	@echo "Regenerating docs/synz.md..."
+	python tests/feat.py 2>/dev/null | grep -v "^$$" | grep -A 200 "Top 100 Players Ranked" | head -60

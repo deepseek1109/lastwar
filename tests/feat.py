@@ -8,64 +8,122 @@ from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
 
 # Parse command-line arguments
-parser = argparse.ArgumentParser(description='Rank players for recruitment')
-parser.add_argument('--alliance', type=str, help='Filter by alliance name (e.g., pstk, SYNZ)')
-parser.add_argument('--format', type=str, choices=['table', 'simple', 'markdown', 'bullet'], default='table',
-                    help='Output format: table (default), simple (player_id, Power, Kills, Level), markdown, or bullet')
-parser.add_argument('--top', type=int, default=100, help='Number of top players to display (default: 100)')
+parser = argparse.ArgumentParser(description="Rank players for recruitment")
+parser.add_argument(
+    "--alliance", type=str, help="Filter by alliance name (e.g., pstk, SYNZ)"
+)
+parser.add_argument(
+    "--format",
+    type=str,
+    choices=["table", "simple", "markdown", "bullet"],
+    default="table",
+    help="Output format: table (default), simple (player_id, Power, Kills, Level), markdown, or bullet",
+)
+parser.add_argument(
+    "--top",
+    type=int,
+    default=100,
+    help="Number of top players to display (default: 100)",
+)
 args = parser.parse_args()
 
 # Read data from CSV file
-csv_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'synz.csv')
-df = pd.read_csv(csv_path)
-# Rename columns to remove units
-df = df.rename(columns={'Power (m)': 'Power', 'Kills (m)': 'Kills'})
-# Clean data: drop rows with missing essential stats
-df = df.dropna(subset=['Member', 'Power', 'Kills', 'Level', 'Prof Lvl', 'Gift Lvl'])
+csv_path = os.path.join(os.path.dirname(__file__), "..", "data", "synz2.csv")
+df = pd.read_csv(csv_path, skiprows=1)
+df.columns = [
+    "Alliance",
+    "Member",
+    "Level",
+    "Rank",
+    "Power",
+    "Kills",
+    "Prof Lvl",
+    "Gift Lvl",
+]
+df = df[df["Member"].notna() & (df["Member"] != "")]
+# Convert numeric columns
+for col in ["Power", "Kills", "Level", "Prof Lvl", "Gift Lvl"]:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+# Drop rows with missing essential stats
+df = df.dropna(subset=["Member", "Power", "Kills", "Level", "Prof Lvl", "Gift Lvl"])
 
 # 1. Setup Featuretools EntitySet
 es = ft.EntitySet(id="guild_data")
 
 # Create an entity from the dataframe
 # Need to set a unique index for featuretools
-df['player_id'] = df['Member'] # Use member name as a unique ID for this example
-es.add_dataframe(dataframe_name="players",
-                 dataframe=df,
-                 index="player_id")
+df["player_id"] = df["Member"]  # Use member name as a unique ID for this example
+es.add_dataframe(dataframe_name="players", dataframe=df, index="player_id")
 
 # 2. Run Automated Feature Engineering (AFE)
 # This generates many potential features like "SUM(Alliance.Kills)" or "MEAN(Alliance.Power)"
-feature_matrix, feature_defs = ft.dfs(entityset=es,
-                                      target_dataframe_name="players",
-                                      agg_primitives=["sum", "mean", "min", "max", "std"],
-                                      verbose=True)
+feature_matrix, feature_defs = ft.dfs(
+    entityset=es,
+    target_dataframe_name="players",
+    agg_primitives=["sum", "mean", "min", "max", "std"],
+    verbose=True,
+)
 
 # Add Member and Alliance columns back to feature_matrix for display
-feature_matrix['Member'] = df.set_index('player_id')['Member']
-feature_matrix['Alliance'] = df.set_index('player_id')['Alliance']
+feature_matrix["Member"] = df.set_index("player_id")["Member"]
+feature_matrix["Alliance"] = df.set_index("player_id")["Alliance"]
 
 print("\n--- Generated Feature Matrix (Sample of New Composite Scores) ---")
 # Display newly generated features alongside original stats
-available_cols = [col for col in ['Power', 'Kills', 'Level'] if col in feature_matrix.columns]
+available_cols = [
+    col for col in ["Power", "Kills", "Level"] if col in feature_matrix.columns
+]
 print(feature_matrix[available_cols].to_markdown())
 
 
 # 3. Use an ML model to interpret which generated feature is strongest
 # We can define a simple "Target Score" (e.g., a combination of stats)
-# Power and level as primary factors, kills as secondary:
 # - Power: primary factor (multiplier 2.0)
 # - Kills: exponential weighting (power 1.5, multiplier 15) - bonus for activity
 # - Level: quadratic with strong multiplier (10.0) - progression heavily valued
-feature_matrix['target_strength'] = (feature_matrix['Power'] * 2.0) + \
-                                    (np.power(feature_matrix['Kills'], 1.5) * 15) + \
-                                    ((feature_matrix['Level'] - 29) ** 2) * 10
+# - Prof Lvl: critical - 100 is max, <90 is really bad (heavy penalty)
+# - Gift Lvl: 1-4 are outliers (bad), 5-6 ok, 7+ good
+def calc_prof_score(prof_lvl):
+    if prof_lvl >= 100:
+        return 50
+    elif prof_lvl >= 95:
+        return 30
+    elif prof_lvl >= 90:
+        return 10
+    else:
+        return -50
+
+
+def calc_gift_score(gift_lvl):
+    if gift_lvl >= 7:
+        return 20
+    elif gift_lvl >= 5:
+        return 10
+    elif gift_lvl >= 4:
+        return 0
+    else:
+        return -30
+
+
+feature_matrix["Prof Score"] = feature_matrix["Prof Lvl"].apply(calc_prof_score)
+feature_matrix["Gift Score"] = feature_matrix["Gift Lvl"].apply(calc_gift_score)
+
+feature_matrix["target_strength"] = (
+    (feature_matrix["Power"] * 2.0)
+    + (np.power(feature_matrix["Kills"], 1.5) * 15)
+    + ((feature_matrix["Level"] - 29) ** 2) * 10
+    + feature_matrix["Prof Score"]
+    + feature_matrix["Gift Score"]
+)
 
 # 4. Train a simple Linear Regression model to find a single composite score/coefficient
 # This model will try to predict our 'target_strength' using the generated features
-features_for_model = feature_matrix.drop(['target_strength'], axis=1).select_dtypes(include=[np.number])
+features_for_model = feature_matrix.drop(["target_strength"], axis=1).select_dtypes(
+    include=[np.number]
+)
 # Clean any NaNs generated by Featuretools for the model
 features_for_model = features_for_model.dropna()
-target = feature_matrix.loc[features_for_model.index, 'target_strength']
+target = feature_matrix.loc[features_for_model.index, "target_strength"]
 
 model = LinearRegression()
 model.fit(features_for_model, target)
@@ -76,76 +134,109 @@ composite_scores = model.predict(features_for_model)
 min_score = composite_scores.min()
 max_score = composite_scores.max()
 normalized_scores = ((composite_scores - min_score) / (max_score - min_score)) * 100
-feature_matrix.loc[features_for_model.index, 'Composite_Recruit_Score'] = normalized_scores
+feature_matrix.loc[features_for_model.index, "Composite_Recruit_Score"] = (
+    normalized_scores
+)
 
 print("\n--- Top 100 Players Ranked by Composite Recruit Score ---")
-ranked_players = feature_matrix.sort_values(by='Composite_Recruit_Score', ascending=False)
-display_cols = [col for col in ['Alliance', 'Member', 'Composite_Recruit_Score', 'Level', 'Kills', 'Power'] 
-                if col in ranked_players.columns]
+ranked_players = feature_matrix.sort_values(
+    by="Composite_Recruit_Score", ascending=False
+)
+display_cols = [
+    col
+    for col in [
+        "Alliance",
+        "Member",
+        "Composite_Recruit_Score",
+        "Level",
+        "Kills",
+        "Power",
+        "Prof Lvl",
+        "Gift Lvl",
+    ]
+    if col in ranked_players.columns
+]
 
 # Filter by alliance if specified
 if args.alliance:
-    ranked_players = ranked_players[ranked_players['Alliance'].str.lower() == args.alliance.lower()]
+    ranked_players = ranked_players[
+        ranked_players["Alliance"].str.lower() == args.alliance.lower()
+    ]
     print(f"\nFiltered by alliance: {args.alliance}")
 
 # Get top N players
 top_n = ranked_players.head(args.top)
 
 # Format output based on --format argument
-if args.format == 'simple':
+if args.format == "simple":
     # Simple format: player_id, Power, Kills, Level
     print("\n--- Top {} Players (Simple Format) ---".format(args.top))
-    simple_cols = [col for col in ['Power', 'Kills', 'Level'] if col in top_n.columns]
+    simple_cols = [col for col in ["Power", "Kills", "Level"] if col in top_n.columns]
     simple_df = top_n[simple_cols].copy()
     print(simple_df.to_markdown())
-elif args.format == 'bullet':
+elif args.format == "bullet":
     # Bullet format: rank. name (kills=X, level=Y, power=Z)
     print("\n--- Top {} Players (Bullet Format) ---".format(args.top))
     for idx, (player_id, row) in enumerate(top_n.iterrows(), 1):
-        kills = row['Kills']
-        level = row['Level']
-        power = row['Power']
+        kills = row["Kills"]
+        level = row["Level"]
+        power = row["Power"]
         print(f"- {idx}. {player_id} (kills={kills}, level={level}, power={power})")
-elif args.format == 'markdown':
+elif args.format == "markdown":
     # Markdown format: full details
     print("\n--- Top {} Players (Markdown Format) ---".format(args.top))
     display_df = top_n[display_cols].copy()
-    if 'Composite_Recruit_Score' in display_df.columns:
-        display_df['Composite_Recruit_Score'] = display_df['Composite_Recruit_Score'].round(1)
-    display_df.insert(0, 'Rank', range(1, len(display_df) + 1))
+    if "Composite_Recruit_Score" in display_df.columns:
+        display_df["Composite_Recruit_Score"] = display_df[
+            "Composite_Recruit_Score"
+        ].round(1)
+    display_df.insert(0, "Rank", range(1, len(display_df) + 1))
     print(display_df.to_markdown(index=False))
 else:
     # Default table format
     print("\n--- Top {} Players Ranked by Composite Recruit Score ---".format(args.top))
     display_df = top_n[display_cols].copy()
-    if 'Composite_Recruit_Score' in display_df.columns:
-        display_df['Composite_Recruit_Score'] = display_df['Composite_Recruit_Score'].round(1)
-    display_df.insert(0, 'Rank', range(1, len(display_df) + 1))
+    if "Composite_Recruit_Score" in display_df.columns:
+        display_df["Composite_Recruit_Score"] = display_df[
+            "Composite_Recruit_Score"
+        ].round(1)
+    display_df.insert(0, "Rank", range(1, len(display_df) + 1))
     print(display_df.to_markdown(index=False))
 
     # Display consideration list
-    consideration = ranked_players.iloc[args.top:]
+    consideration = ranked_players.iloc[args.top :]
     if len(consideration) > 0:
         print("\n--- Consideration Table (Ranked {}+) ---".format(args.top + 1))
         consideration_df = consideration[display_cols].copy()
-        if 'Composite_Recruit_Score' in consideration_df.columns:
-            consideration_df['Composite_Recruit_Score'] = consideration_df['Composite_Recruit_Score'].round(1)
-        consideration_df.insert(0, 'Rank', range(args.top + 1, args.top + 1 + len(consideration_df)))
+        if "Composite_Recruit_Score" in consideration_df.columns:
+            consideration_df["Composite_Recruit_Score"] = consideration_df[
+                "Composite_Recruit_Score"
+            ].round(1)
+        consideration_df.insert(
+            0, "Rank", range(args.top + 1, args.top + 1 + len(consideration_df))
+        )
         print(consideration_df.to_markdown(index=False))
 
     # Count players by alliance
     print("\n--- Player Count by Alliance (Top {}) ---".format(args.top))
-    top_alliance_counts = top_n['Alliance'].value_counts().sort_values(ascending=False)
-    alliance_df = pd.DataFrame({'Alliance': top_alliance_counts.index, 'Count': top_alliance_counts.values})
+    top_alliance_counts = top_n["Alliance"].value_counts().sort_values(ascending=False)
+    alliance_df = pd.DataFrame(
+        {"Alliance": top_alliance_counts.index, "Count": top_alliance_counts.values}
+    )
     print(alliance_df.to_markdown(index=False))
 
     # Aggregated statistics
     print("\n--- Aggregated Statistics (Top {} Players) ---".format(args.top))
-    total_power = top_n['Power'].sum()
-    total_kills = top_n['Kills'].sum()
-    stats_df = pd.DataFrame({'Metric': ['Total Power', 'Total Kills'], 'Value': [f"{total_power:.0f}", f"{total_kills:.2f}"]})
+    total_power = top_n["Power"].sum()
+    total_kills = top_n["Kills"].sum()
+    stats_df = pd.DataFrame(
+        {
+            "Metric": ["Total Power", "Total Kills"],
+            "Value": [f"{total_power:.0f}", f"{total_kills:.2f}"],
+        }
+    )
     print(stats_df.to_markdown(index=False))
 
     # Count by level
     print("\n--- Player Count by Level (Top {}) ---".format(args.top))
-    level_counts = top_n['Level'].value_counts().sort_values(ascending=False)
+    level_counts = top_n["Level"].value_counts().sort_values(ascending=False)

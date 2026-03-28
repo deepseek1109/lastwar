@@ -89,3 +89,5 @@ Due to marching time, 81 attacks from warlord may not be possible, but other pla
 - 30M+ 1st squad: ~10G damage
 
 Previouly, we cracked worm to stage 3. With all the estimation, we double the damage. In summary, destroying the Lv70 Worm is achievable.
+
+Consider humbly exploring rally-based strategies for alliance events, such as the Lv70 Worm kill, to potentially double damage output by leveraging coordinated waves and joiner participation, as a fresh perspective rather than a required pursuit.
